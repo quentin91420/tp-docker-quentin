@@ -1,0 +1,43 @@
+#
+#
+# Name file : dockerfile-compose.yml
+# By :   Quentin Bresson
+# Date : 09/05/2019
+
+version: '3'
+
+services:
+
+# ---> Frontend
+
+  api-frontend:
+    hostname: api-frontend
+    build: ./api-frontend
+    environment:
+      API_BACKEND_URL: api-backend
+      API_BACKEND_PORT: 8001
+    ports:
+      - 8000:8000
+    links:
+      - api-backend
+    networks:
+     net-frontend:
+     net-backend:
+    restart: on-failure
+
+# ---> Backend
+
+  api-backend:
+    hostname: api-backend
+    build: ./api-backend
+    networks:
+      net-backend:
+        aliases:
+          - api-backend
+    restart: on-failure
+
+# ---> Networks
+
+networks:
+ net-frontend:
+ net-backend:
